@@ -10,9 +10,9 @@
         image_id: ami-0325498274077fac5
         network_interfaces:
           - device_index: 0
-            subnet_id: subnet-09c03dad1cb9b59f2
+            subnet_id: subnet-089e7e73167c18063
             groups:
-              - sg-0259aaaf3c5d3eb7e  # Vérifiez que ce SG est dans le même VPC que le subnet
+              - sg-04443f5c77aada560  # Vérifiez que ce SG est dans le même VPC que le subnet
             assign_public_ip: true
         tags:
           Name: "{{ item }}"
