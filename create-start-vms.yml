@@ -1,29 +1,28 @@
 ---
-- name: Create and start one ec2 instance
+- name: Create and start EC2 instances
   hosts: localhost
   tasks:
-    - name: start an instance with a public IP address
-      become: false
+    - name: Launch instances with proper configuration
       amazon.aws.ec2_instance:
         name: "{{ item }}"
         key_name: vockey
         instance_type: t4g.nano
-        security_group: default
-        state: running
-        filters:
-          tag:Name: "{{ item }}"
-          instance-state-name:
-            - "running"
-            - "stopped"
-            - "pending"
-            - "stopping"
-            - "shutting-down"
-        network_interfaces:
-          - assign_public_ip: true
         image_id: ami-0325498274077fac5
+        network_interfaces:
+          - device_index: 0
+            subnet_id: subnet-09c03dad1cb9b59f2
+            groups:
+              - sg-0259aaaf3c5d3eb7e  # Vérifiez que ce SG est dans le même VPC que le subnet
+            assign_public_ip: true
         tags:
+          Name: "{{ item }}"
           Environment: Testing
-      with_items:
+        filters:  # Ajout d'un filtre pour vérifier les instances existantes
+          "tag:Name": "{{ item }}"
+          instance-state-name: [running, stopped, pending]
+        wait: yes
+        state: present  # Crée seulement si l'instance n'existe pas déjà
+      loop:
         - mavm
         - totovm
         - zefvm
