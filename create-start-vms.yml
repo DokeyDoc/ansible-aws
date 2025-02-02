@@ -10,9 +10,9 @@
         image_id: ami-0325498274077fac5
         network_interfaces:
           - device_index: 0
-            subnet_id: subnet-089e7e73167c18063
+            subnet_id: subnet-00bc9c68a48b39e77
             groups:
-              - sg-04443f5c77aada560  # Vérifiez que ce SG est dans le même VPC que le subnet
+              - sg-00a2c7bc17e1a0916  # Vérifiez que ce SG est dans le même VPC que le subnet
             assign_public_ip: true
         tags:
           Name: "{{ item }}"
@@ -20,9 +20,10 @@
         filters:  # Ajout d'un filtre pour vérifier les instances existantes
           "tag:Name": "{{ item }}"
           instance-state-name: [running, stopped, pending]
-        wait: yes
+        wait: true
         state: present  # Crée seulement si l'instance n'existe pas déjà
       loop:
         - mavm
         - totovm
         - zefvm
+        - apisvm
